@@ -16,7 +16,7 @@ csvLoader.init().then(
         ports.forEach(tcp_server.startServer);
         tcp_client.init(ports);
 
-        tcp_client.dataEmitter.on('refresh', data => ws_server.broadcast(JSON.stringify(data)));
+        tcp_client.dataEmitter.on('refresh', data => ws_server.broadcast(data));
     },
     (err) => {
         console.log("error in reading data");

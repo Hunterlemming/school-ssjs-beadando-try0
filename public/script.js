@@ -10,18 +10,44 @@ ws.onmessage = event => {
         data = event.data.toString();
     }
     console.log(data);
+    createChart(createFrame(data.split(",")));
 }
 
+const positions = [];
 
-function createChart() {
+function initPositions() {
+    for (let y = 1; y < 65; y++) {
+        for (let x = 1; x < 65; x++) {
+            positions.push({x: x, y: y});
+        }
+    }
+}
+
+initPositions();
+
+function createFrame(rawFrameData) {
+    while (positions.length === 0) {
+        // waiting for positions to load
+    }
+    return rawFrameData.map(pixel => {
+        switch (pixel) {
+            case "0": return 'rgba(105,105,105)';
+            case "1": return 'rgba(255,0,0)';
+            case "2": return 'rgba(180,0,0)';
+        }
+    });
+}
+
+function createChart(frameColors) {
+    console.log(frameColors);
     const ctx = document.getElementById("myChart");
     ctx.style.backgroundColor = 'rgba(0,0,0)';
     const myChart = new Chart(ctx, {
         type: 'scatter',
         data: {
             datasets: [{
-                data: [{x: 1, y: 1}, {x: 1, y: 64}, {x: 64, y: 5}, {x: 64, y: 6}, {x: 63, y: 5}],
-                pointBackgroundColor: ["gray", "gray", "red", "red", "gray"],
+                data: positions,
+                pointBackgroundColor: frameColors,
                 pointRadius: 6
             }]
         },
@@ -51,5 +77,3 @@ function createChart() {
         }
     });
 }
-
-createChart();
